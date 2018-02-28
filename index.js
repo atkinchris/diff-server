@@ -13,9 +13,16 @@ const server = async () => {
   app.set('view engine', 'ejs')
 
   app.get('/', async (req, res) => {
-    const nominations = await db.all()
+    const nominations = await db.getAll()
 
     res.render('index', { nominations })
+  })
+
+  app.get('/changes', async (req, res) => {
+    const { from, to } = req.query
+    const nominations = await db.getAllChanges(from, to)
+
+    res.render('changes', { nominations })
   })
 
   app.post('/', async (req, res) => {

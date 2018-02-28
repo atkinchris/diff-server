@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    .table td,
+    .table th {
+      padding: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <table class="table" border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Space</th>
+        <th>Shelf</th>
+        <th>SKU</th>
+        <th>Comment</th>
+        <th>Changed At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% nominations.forEach(function(nomination) { %>
+        <tr>
+          <td><%= nomination.nomination %></td>
+          <td><%= nomination.space %></td>
+          <td><%= nomination.shelf %></td>
+          <td><%= nomination.sku %></td>
+          <td><%= nomination.comment %></td>
+          <td><%= nomination.effective_from %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</body>
+</html>

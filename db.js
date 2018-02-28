@@ -27,10 +27,17 @@ const buildDb = async () => {
     })
   }
 
-  const all = () => db
+  const getAll = () => db
     .select()
     .from(tableName)
     .where({ effective_to: null })
+
+  const getAllChanges = (from, to = now()) => db
+    .select()
+    .from(tableName)
+    .whereBetween('effective_from', [from, to])
+    .orderBy('nomination')
+    .orderBy('effective_from', 'desc')
 
   const get = id => db
     .first()
@@ -83,7 +90,8 @@ const buildDb = async () => {
   }
 
   return {
-    all,
+    getAll,
+    getAllChanges,
     get,
     insert,
     remove,
