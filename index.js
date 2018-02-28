@@ -21,46 +21,30 @@ const server = async () => {
   app.post('/', async (req, res) => {
     const { body } = req
 
-    try {
-      await db.insert(body)
-
-      res.redirect('/')
-    } catch (error) {
-      console.log(error)
-      res.status(400).json(error)
-    }
+    await db.insert(body)
+    res.redirect('/')
   })
 
-  app.get('/nominations/:id', async (req, res) => {
+  app.get('/:id', async (req, res) => {
     const { id } = req.params
-    const entries = await db.select(id)
+    const nomination = await db.get(id)
 
-    res.json(entries)
+    res.render('edit', { nomination })
   })
 
-  app.post('/nominations:id', async (req, res) => {
+  app.post('/:id', async (req, res) => {
     const { body } = req
     const { id } = req.params
 
-    try {
-      await db.update(id, body)
-      res.sendStatus(200)
-    } catch (error) {
-      console.log(error)
-      res.status(400).json(error)
-    }
+    await db.update(id, body)
+    res.redirect('/')
   })
 
   app.delete('/:id', async (req, res) => {
     const { id } = req.params
 
-    try {
-      await db.remove(id)
-      res.sendStatus(200)
-    } catch (error) {
-      console.log(error)
-      res.status(400).json(error)
-    }
+    await db.remove(id)
+    res.sendStatus(200)
   })
 
   app.listen(port, () => {

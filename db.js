@@ -32,7 +32,13 @@ const buildDb = async () => {
     .from(tableName)
     .where({ effective_to: null })
 
-  const select = id => all().where({ nomination: id })
+  const get = id => db
+    .first()
+    .from(tableName)
+    .where({
+      nomination: id,
+      effective_to: null,
+    })
 
   const insert = (body) => {
     const nomination = Object.assign({}, body, {
@@ -43,8 +49,7 @@ const buildDb = async () => {
   }
 
   const remove = async (id) => {
-    const results = await select(id)
-    const latest = results[0]
+    const latest = await get(id)
 
     return db
       .from(tableName)
@@ -53,8 +58,7 @@ const buildDb = async () => {
   }
 
   const update = async (id, body) => {
-    const results = await select(id)
-    const latest = results[0]
+    const latest = await get(id)
     const next = Object.assign({}, latest, body, {
       id: undefined,
       nomination: id,
@@ -80,7 +84,7 @@ const buildDb = async () => {
 
   return {
     all,
-    select,
+    get,
     insert,
     remove,
     update,
