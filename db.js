@@ -27,13 +27,12 @@ const buildDb = async () => {
     })
   }
 
-  const all = () => db.select().from(tableName)
-
-  const select = id => db
+  const all = () => db
     .select()
     .from(tableName)
-    .where({ nomination: id })
-    .orderBy('effective_from', 'desc')
+    .where({ effective_to: null })
+
+  const select = id => all().where({ nomination: id })
 
   const insert = (body) => {
     const nomination = Object.assign({}, body, {

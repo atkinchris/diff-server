@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+
 const buildDb = require('./db')
 
 const server = async () => {
@@ -9,18 +10,12 @@ const server = async () => {
 
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
+  app.set('view engine', 'ejs')
 
   app.get('/', async (req, res) => {
     const nominations = await db.all()
 
-    res.json(nominations)
-  })
-
-  app.get('/:id', async (req, res) => {
-    const { id } = req.params
-    const entries = await db.get(id)
-
-    res.json(entries)
+    res.render('index', { nominations })
   })
 
   app.post('/', async (req, res) => {
@@ -28,14 +23,22 @@ const server = async () => {
 
     try {
       await db.insert(body)
-      res.sendStatus(200)
+
+      res.redirect('/')
     } catch (error) {
       console.log(error)
       res.status(400).json(error)
     }
   })
 
-  app.post('/:id', async (req, res) => {
+  app.get('/nominations/:id', async (req, res) => {
+    const { id } = req.params
+    const entries = await db.select(id)
+
+    res.json(entries)
+  })
+
+  app.post('/nominations:id', async (req, res) => {
     const { body } = req
     const { id } = req.params
 
@@ -62,7 +65,7 @@ const server = async () => {
 
   app.listen(port, () => {
     // eslint-disable-next-line no-console
-    console.log(`Server start on port ${port}`)
+    console.log(`Server start on port http://localhost:${port}`)
   })
 }
 

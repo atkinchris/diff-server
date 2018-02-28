@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    .form {
+      margin-bottom: 1rem;
+    }
+
+    .form input {
+      display: block;
+    }
+
+    .table td,
+    .table th {
+      padding: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <form method="post" class="form">
+    <label for="space">Space</label>
+    <input name="space" id="space" type="text" value="Plinth 1" />
+    <label for="shelf">Shelf</label>
+    <input name="shelf" id="shelf" type="number" value="1" />
+    <label for="sku">SKU</label>
+    <input name="sku" id="sku" type="text" value="24" />
+    <label for="comment">Comment</label>
+    <input name="comment" id="comment" type="text" />
+    <button type="submit">Submit</button>
+  </form>
+  <table class="table" border="1">
+    <thead>
+      <tr>
+        <th>Space</th>
+        <th>Shelf</th>
+        <th>SKU</th>
+        <th>Comment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% nominations.forEach(function(nomination) { %>
+        <tr>
+          <td><%= nomination.space %></td>
+          <td><%= nomination.shelf %></td>
+          <td><%= nomination.sku %></td>
+          <td><%= nomination.comment %></td>
+          <td>
+            <a href="<%= nomination.nomination %>">Edit</a>
+          </td>
+          <td>
+            <button onclick="deleteItem('<%= nomination.nomination %>')">Delete</button>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <script>
+    function deleteItem(id) {
+      fetch(`/${id}`, { method: 'DELETE' }).then(() => {
+        location.reload()
+      })
+    }
+  </script>
+</body>
+</html>
